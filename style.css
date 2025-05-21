@@ -1,0 +1,62 @@
+h1 {
+  font-size: 5rem;
+  color: grey;
+  font-family: "Arvo", cursive;
+  text-shadow: 3px 0 black;
+  width: 470px;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 5px;
+}
+.calcBtn{
+  outline: none;
+  border: 10px solid #404B69;
+  font-size: 2rem;
+  font-family: 'Arvo', cursive;
+  line-height: 2;
+  font-weight: 800;
+  color: red;
+  text-shadow: 3px 0 #DBEDF3;
+  border-radius: 15px;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  margin: 10px;
+  background-color: white;
+}
+input{
+  border: 10px solid #404B69;
+  border-radius: 15px;
+  width: 450px;
+  height: 100px;
+  margin: 10px;
+  font-size: 3rem;
+  color: #4d4d4d;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  background-color: #e6e6e6;
+  text-align: center;
+}
+.buttons{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    width: 400px;
+}
+.sum.calcBtn{
+    grid-row: span 2;
+    height: 220px;
+}
+.equals.calcBtn{
+    grid-row: span 3;
+    height: 340px;
+}
+.zero.calcBtn{
+    grid-column: span 2;
+    width: 235px;
+}
+.pressed{
+  box-shadow: 0 3px 4px 0 #DBEDF3;
+  opacity: 0.5;
+  background-color: #89CFF0;
+}
