@@ -6,12 +6,12 @@ let storedValue = ""; // define the variable
 
 for (var i=0; i<numberCalcBtn; i++ ){
     calcButtons[i].addEventListener("click",function(){
-        //This gets the first class in the list of the clicked button e.g one or sum or divide
-        var btnClass = this.classList[0]; 
-        var btnValue = this.innerHTML;        
         
-        btnAnnimation(btnClass);//Call btnAnnimation with btnClass
-        number(btnValue);//Call number with btnValue             
+        var btnValue = this.innerHTML;        
+
+        number(btnValue);//Call number with btnValue
+        btnAnnimation(btnValue);//Call btnAnnimation with btnValue
+                     
     })  
 } 
 
