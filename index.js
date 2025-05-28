@@ -16,7 +16,7 @@ for (var i=0; i<numberCalcBtn; i++ ){
 } 
 
 //Detect Keyboard Stroke
-document.addEventListener("keypress", function(event){
+document.addEventListener("keydown", function(event){
     number(event.key);//Call number
     btnAnnimation(event.key);//Call btnAnnimation
 })
@@ -29,7 +29,8 @@ function addValue(val){
 
 // Handles key input for numbers and basic operators
 function number(key){
-    // Valid keys: digits, basic operators, equal sign, and comma
+    // Valid keys: digits, basic operators, equal sign, comma, Enter, Back, Backspace  
+    // HTML value
     switch(key){
         case "0":
         case "1":
@@ -46,15 +47,25 @@ function number(key){
         case "-":
         case "+":
         case "=":
-        case ",":    
+        case ",": 
+        case "Enter":
             // Add the key to the stored input string
-            let result = addValue(key);
-            //Update the display
-            document.getElementById("calcAnswer").value = storedValue; 
-        break;
+            addValue(key);            
+            break; 
+        case "Clear": 
+            //Clear storedValue
+            storedValue = ""; 
+            break;
+        case "⟵":
+        case "Backspace":
+            //Remove one character from storedValue
+            storedValue = storedValue.slice(0,-1);
+            break;            
         // Handle unsupported keys by showing an alert
         default: alert('unsupported key - '+ key);
     }
+    //Update the display
+    document.getElementById("calcAnswer").value = storedValue; 
 }
 
 /* function sum (num1, num2){
@@ -70,8 +81,13 @@ function multiply(num1, num2){
     return(num1*num2);
 } */
 
+function clearAnswer(){
+    document.getElementById("calcAnswer").value = "answer";
+}
+
 function btnAnnimation(currentKey){
     // Map key characters to the class names used in your HTML
+    // HTML value to class
     const keyToClass = {
         "0": "zero",
         "1": "one",
@@ -88,7 +104,11 @@ function btnAnnimation(currentKey){
         "*": "multiply",
         "/": "divide",
         "=": "equals",
-        ",": "comma"
+        ",": "comma",
+        "Clear": "clear",
+        "⟵": "back",
+        "Backspace": "back",
+        "Enter": "equals"
     };
 
     // Look up the corresponding CSS class name for the pressed key using the keyToClass mapping

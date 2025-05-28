@@ -55,6 +55,10 @@ input{
     grid-column: span 2;
     width: 235px;
 }
+.clear.calcBtn{
+  grid-column: span 3;
+  width: 360px;
+}
 .pressed{
   box-shadow: 0 3px 4px 0 #DBEDF3;
   opacity: 0.5;
