@@ -1,7 +1,9 @@
 document.getElementById("calcAnswer").value = "answer"; //Display "Answer initialy"
 var calcButtons = document.querySelectorAll(".calcBtn"); // define the variable
 var numberCalcBtn = calcButtons.length; // define the variable
-let storedValue = ""; // define the variable
+let currentNumber  = ""; // define the variable
+let storedNumber = null;
+let currentOperation = null;
 
 
 for (var i=0; i<numberCalcBtn; i++ ){
@@ -19,19 +21,26 @@ for (var i=0; i<numberCalcBtn; i++ ){
 document.addEventListener("keydown", function(event){
     number(event.key);//Call number
     btnAnnimation(event.key);//Call btnAnnimation
+
+    switch(event.key){
+        case "Enter":
+            // Prevent default behaviour for enter to add the last clicked/ pressed button and append to currentNumber
+           event.preventDefault(); 
+           break; 
+    }
 })
 
-// Appends the given value to the storedValue string and returns it
+// Appends the given value to the currentNumber  string and returns it
 function addValue(val){
-    storedValue += val;
-    return val;
+    currentNumber  += val;
 } 
 
 // Handles key input for numbers and basic operators
 function number(key){
     // Valid keys: digits, basic operators, equal sign, comma, Enter, Back, Backspace  
     // HTML value
-    switch(key){
+    switch (key) {
+        // Digits 0–9 and comma for decimal input
         case "0":
         case "1":
         case "2":
@@ -42,48 +51,100 @@ function number(key){
         case "7":
         case "8":
         case "9":
-        case "/":
-        case "*":
-        case "-":
-        case "+":
-        case "=":
-        case ",": 
-        case "Enter":
-            // Add the key to the stored input string
-            addValue(key);            
-            break; 
-        case "Clear": 
-            //Clear storedValue
-            storedValue = ""; 
+        case ".":
+            addValue(key);
             break;
+        case ",":
+            // Treat comma as a decimal point and only allow one
+            if (!currentNumber.includes(",")) {
+                addValue("."); // Internally use dot
+            }
+            break;
+        // Arithmetic operations
+        case "+":
+            setOperation('+');
+            break;
+        case "-":
+            setOperation('-');
+            break;
+        case "*":
+            setOperation('*');
+            break;
+        case "/":
+            setOperation('/');
+            break;
+        // Clear the current number input
+        case "Clear":
+            currentNumber = "";
+            break;
+        // Delete the last character (Backspace or back arrow)
         case "⟵":
         case "Backspace":
-            //Remove one character from storedValue
-            storedValue = storedValue.slice(0,-1);
-            break;            
-        // Handle unsupported keys by showing an alert
-        default: alert('unsupported key - '+ key);
+            currentNumber = currentNumber.slice(0, -1);
+            break;
+        // Calculate the result when Enter or = is pressed
+        case "Enter":
+        case "=":
+            calculate();
+            break;
+        // Handle unsupported keys
+        default:
+            alert('Unsupported key - ' + key);
     }
-    //Update the display
-    document.getElementById("calcAnswer").value = storedValue; 
+
+    // Update the calculator display with the current number
+    document.getElementById("calcAnswer").value = currentNumber;
 }
 
-/* function sum (num1, num2){
-    return(num1+num2);
-}
-function subtract(num1, num2){
-    return(num1-num2);
-}
-function divide(num1, num2){
-    return(num1/num2);
-}
-function multiply(num1, num2){
-    return(num1*num2);
-} */
 
-function clearAnswer(){
-    document.getElementById("calcAnswer").value = "answer";
+function setOperation(op) {
+    // Only proceed if there is a number currently entered
+    if (currentNumber !== '') {
+        // Convert the current input (string) to a number and store it
+        storedNumber = parseFloat(currentNumber);
+        // Save the selected operation (e.g., "+", "-", "*", "/")
+        currentOperation = op;
+        // Clear the currentNumber so the user can enter the next number
+        currentNumber = '';
+    }
 }
+
+
+function calculate() {
+    // Check that both storedNumber and currentNumber are valid (not null)
+    if (storedNumber !== null && currentNumber !== null) {
+        let result;
+        // Convert the current input string to a number (can include decimals)
+        let secondNumber = parseFloat(currentNumber.replace(',', '.'));
+
+        // Perform the calculation based on the selected operation
+        switch (currentOperation) {
+            case '+':
+                result = storedNumber + secondNumber; // Addition
+                break;
+            case '-':
+                result = storedNumber - secondNumber; // Subtraction
+                break;
+            case '*':
+                result = storedNumber * secondNumber; // Multiplication
+                break;
+            case '/':
+                // Check for divide-by-zero error
+                result = secondNumber !== 0 ? storedNumber / secondNumber : 'Error';
+                break;
+        }
+
+        // Display the result in the calculator display field
+        document.getElementById("calcAnswer").value = result;
+        // Update currentNumber with the result so it can be used in the next operation
+        // toString() keeps any decimal points if the result is not a whole number
+        currentNumber = result.toString();
+        // Clear stored values to prepare for a new calculation
+        storedNumber = null;
+        currentOperation = null;
+    }
+}
+
 
 function btnAnnimation(currentKey){
     // Map key characters to the class names used in your HTML
@@ -104,6 +165,7 @@ function btnAnnimation(currentKey){
         "*": "multiply",
         "/": "divide",
         "=": "equals",
+        ".": "comma",
         ",": "comma",
         "Clear": "clear",
         "⟵": "back",
